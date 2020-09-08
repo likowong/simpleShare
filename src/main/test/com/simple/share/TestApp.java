@@ -2,6 +2,8 @@ package com.simple.share;
 
 import com.spring.simple.development.core.annotation.config.*;
 import com.spring.simple.development.core.annotation.config.SpringSimpleApplication;
+import com.taobao.api.DefaultTaobaoClient;
+import com.taobao.api.TaobaoClient;
 import org.junit.Before;
 import org.junit.Test;
 
