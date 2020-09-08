@@ -27,7 +27,7 @@ public class AutoCodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = "D:\\workspace\\simple-development\\simple-development-demo\\src\\main";
+        String projectPath = "D:\\project\\simpleShare\\src\\main";
         gc.setOutputDir(projectPath+"\\java");
         gc.setAuthor("luke");
         gc.setOpen(false);
@@ -39,7 +39,7 @@ public class AutoCodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://172.22.5.248:3306/demo?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://192.168.0.20:3306/share?useUnicode=true&useSSL=false&characterEncoding=utf8");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("123456");
@@ -47,7 +47,7 @@ public class AutoCodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.spring.simple.development.demo");
+        pc.setParent("com.simple.share");
         pc.setEntity("model");
         mpg.setPackageInfo(pc);
 
@@ -71,7 +71,7 @@ public class AutoCodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath+"/resources/mapper/"
+                return projectPath+"/resources/mapper/share"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -131,7 +131,7 @@ public class AutoCodeGenerator {
         strategy.setRestControllerStyle(true);
         // 写于父类中的公共字段
         //strategy.setSuperEntityColumns("id");
-        strategy.setInclude("t_demo".split(","));
+        strategy.setInclude("t_member".split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("t_");
         mpg.setStrategy(strategy);
