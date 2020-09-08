@@ -1,5 +1,6 @@
 package com.simple.share;
 
+import com.spring.simple.development.support.properties.PropertyConfigurer;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
@@ -12,10 +13,13 @@ public class Test {
         /**
          * @Author: luke
          * @Description: //TODO
-         * @Date: 2020-09-08 17:09  
+         * @Date: 2020-09-08 17:09
          * @param:args
          * @return void
          **/
+        //String url = PropertyConfigurer.getProperty("taobao.url");
+        //String appkey = PropertyConfigurer.getProperty("taobao.appkey");
+        //String secret = PropertyConfigurer.getProperty("taobao.secret");
         String url = "https://eco.taobao.com/router/rest";
         String appkey = "31238408";
         String secret = "07fb32b10dd0ec573f72544743de57a6";
