@@ -2,8 +2,6 @@ package com.simple.share;
 
 import com.spring.simple.development.core.annotation.config.*;
 import com.spring.simple.development.core.annotation.config.SpringSimpleApplication;
-import com.spring.simple.development.core.baseconfig.tomcat.SimpleApplication;
-import com.simple.share.service.TestDemoService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,18 +14,16 @@ import org.junit.Test;
 @EnableMybatis
 @EnableRedis
 @EnableSwagger
-@EnableFastGoConfig(branch = "dev", projectCode = "1234", fastGoServer = "http://tech20.com")
 @SpringSimpleApplication
 public class TestApp {
 
     @Before
     public void simpleTestBefore() {
-        SimpleApplication.runTest(TestApp.class);
+        //SimpleApplication.runTest(TestApp.class);
     }
 
     @Test
     public void test() {
-            TestDemoService testDemoService = SimpleContentApplication.getBeanByType(TestDemoService.class);
-            testDemoService.getDemoDo(1L);
+
     }
 }
