@@ -69,8 +69,17 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, MemberDo> imple
             userInfoVo.setNickName(weixinLoginVo.getNickName());
         } else {
             MemberDo memberDo = listMemberDo.get(0);
-            userInfoVo.setAvatarUrl(memberDo.getAvatarUrl());
-            userInfoVo.setNickName(memberDo.getNickName());
+            // 更新用户
+            if (!memberDo.getAddress().equals(weixinLoginVo.getAddress()) || !memberDo.getAvatarUrl().equals(weixinLoginVo.getAddress()) ||
+            !memberDo.getNickName().equals(weixinLoginVo.getNickName())){
+                memberDo.setAddress(weixinLoginVo.getAddress());
+                memberDo.setAvatarUrl(weixinLoginVo.getAvatarUrl());
+                memberDo.setNickName(weixinLoginVo.getNickName());
+                updateById(memberDo);
+            }
+            userInfoVo.setAvatarUrl(weixinLoginVo.getAvatarUrl());
+            userInfoVo.setNickName(weixinLoginVo.getNickName());
+
         }
 
         // 生成token

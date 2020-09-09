@@ -17,7 +17,7 @@ import org.junit.Test;
 @EnableRedis
 @EnableSwagger
 @SpringSimpleApplication
-public class TestApp {
+public class TaobaoTestApp {
 
     @Before
     public void simpleTestBefore() {

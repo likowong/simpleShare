@@ -131,7 +131,7 @@ public class AutoCodeGenerator {
         strategy.setRestControllerStyle(true);
         // 写于父类中的公共字段
         //strategy.setSuperEntityColumns("id");
-        strategy.setInclude("t_member".split(","));
+        strategy.setInclude("t_material".split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("t_");
         mpg.setStrategy(strategy);
