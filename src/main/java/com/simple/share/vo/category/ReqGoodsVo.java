@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,7 +21,7 @@ public class ReqGoodsVo {
      * 搜索关键字
      **/
     @ApiModelProperty(value = "类目Id", example = "123213213")
-    @NotNull(message = "搜索关键字不能为空")
+    @NotEmpty(message = "搜索关键字不能为空")
     private String text;
     /**
      * 排序规则
