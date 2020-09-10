@@ -28,4 +28,30 @@ public interface TaobaoService {
      * @param:null
      **/
     String getMaterial(Long materialId, Long pageSize, Long pageNo);
+
+    /**
+     * @return String
+     * @Author: luke
+     * @Description: 通过商品Id查询商品
+     * @Date: 2020-09-10 13:12
+     * @param:goodsId
+     **/
+    String getGoodsDetail(String goodsId);
+
+    /**
+     * @Author: luke
+     * @Description: 生成淘口令
+     * @Date:  2020-09-10 15:52
+    * @param:null
+     * @return 
+     **/
+    String createTpw(String text,String url);
+    /**
+     * @Author: luke
+     * @Description: 搜索商品
+     * @Date:  2020-09-10 17:32
+    * @param:null
+     * @return 
+     **/
+    String searchGoods(String text,String sort,Long pageSize, Long pageNo);
 }

@@ -8,16 +8,21 @@ import com.simple.share.model.MaterialDo;
 import com.simple.share.mapper.MaterialMapper;
 import com.simple.share.service.MaterialService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.simple.share.support.SimpleShareResponseCode;
 import com.simple.share.taobao.TaobaoService;
 import com.simple.share.vo.active.ActiveInfoVo;
 import com.simple.share.vo.category.CategoryVo;
+import com.simple.share.vo.category.ReqGoodsVo;
 import com.simple.share.vo.category.ReqMaterialVo;
+import com.simple.share.vo.taobao.ReqCreateTwdVo;
 import com.spring.simple.development.core.annotation.base.IsApiService;
 import com.spring.simple.development.core.annotation.base.ValidHandler;
 import com.spring.simple.development.core.annotation.base.swagger.Api;
 import com.spring.simple.development.core.annotation.base.swagger.ApiImplicitParam;
 import com.spring.simple.development.core.annotation.base.swagger.ApiOperation;
 import com.spring.simple.development.core.component.mvc.BaseSupport;
+import com.spring.simple.development.support.exception.GlobalException;
+import com.spring.simple.development.support.exception.ResponseCode;
 import com.spring.simple.development.support.utils.JedisPoolUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,7 @@ import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -80,15 +86,84 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, MaterialDo>
             String cacheData = jedis.get(JSONObject.toJSONString(reqMaterialVo));
             if (StringUtils.isEmpty(cacheData)) {
                 String materialData = taobaoService.getMaterial(reqMaterialVo.getMaterialId(), reqMaterialVo.getPageSize(), reqMaterialVo.getPageNo());
-                JSONObject jsonObject = JSON.parseObject(materialData);
-                String responseData = jsonObject.getString("tbk_dg_optimus_material_response");
-                if (StringUtils.isEmpty(responseData)) {
-
-                }
                 jedis.setex(JSONObject.toJSONString(reqMaterialVo), 60 * 60 * 24, materialData);
                 return materialData;
             }
             return cacheData;
+        } finally {
+            JedisPoolUtils.returnRes(jedis);
+        }
+    }
+
+    @Override
+    @ApiOperation(value = "通过商品Id获取商品详情页")
+    @ApiImplicitParam(name = "string", description = "商品Id", resultDataType = String.class)
+    @IsApiService(isLogin = false)
+    public String getGoodsDetail(String goodsId) {
+        if (StringUtils.isEmpty(goodsId)) {
+            throw new GlobalException(ResponseCode.RES_PARAM_IS_EMPTY, "商品Id为空");
+        }
+        Jedis jedis = null;
+        try {
+            jedis = JedisPoolUtils.getJedis();
+            String cacheData = jedis.get(goodsId);
+            if (StringUtils.isEmpty(cacheData)) {
+                String goodsData = taobaoService.getGoodsDetail(goodsId);
+                jedis.setex(goodsId, 60 * 60 * 24, goodsData);
+                return goodsData;
+            }
+            return cacheData;
+        } finally {
+            JedisPoolUtils.returnRes(jedis);
+        }
+    }
+
+    @Override
+    @ApiOperation(value = "生成淘口令")
+    @ApiImplicitParam(name = "string", description = "商品Id", resultDataType = String.class)
+    @IsApiService(isLogin = false)
+    @ValidHandler(key = "reqCreateTwdVo", value = ReqCreateTwdVo.class)
+    public String createTpw(ReqCreateTwdVo reqCreateTwdVo) {
+        return taobaoService.createTpw(reqCreateTwdVo.getText(), reqCreateTwdVo.getUrl());
+    }
+
+    @Override
+    @ApiOperation(value = "搜索商品")
+    @ApiImplicitParam(name = "json", description = "物料对象", resultDataType = String.class)
+    @IsApiService(isLogin = false)
+    @ValidHandler(key = "reqMaterialVo", value = ReqGoodsVo.class)
+    public String searchGoods(ReqGoodsVo reqGoodsVo) {
+        Jedis jedis = null;
+        try {
+            jedis = JedisPoolUtils.getJedis();
+            Double goodsHotSource = jedis.zscore("goodsHot", reqGoodsVo.getText());
+            if (goodsHotSource == null) {
+                jedis.zadd("goodsHot", 1, reqGoodsVo.getText());
+            } else {
+                jedis.zadd("goodsHot", goodsHotSource + 1, reqGoodsVo.getText());
+            }
+            String cacheData = jedis.get(JSONObject.toJSONString(reqGoodsVo));
+            if (StringUtils.isEmpty(cacheData)) {
+                String materialData = taobaoService.searchGoods(reqGoodsVo.getText(), reqGoodsVo.getSort(), reqGoodsVo.getPageSize(), reqGoodsVo.getPageNo());
+                jedis.setex(JSONObject.toJSONString(reqGoodsVo), 60 * 60 * 24, materialData);
+                return materialData;
+            }
+            return cacheData;
+        } finally {
+            JedisPoolUtils.returnRes(jedis);
+        }
+    }
+
+    @Override
+    @ApiOperation(value = "搜索热门")
+    @ApiImplicitParam(name = "json", description = "搜索热门", resultDataType = Set.class)
+    @IsApiService(isLogin = false)
+    public Set<String> getHotKey() {
+        Jedis jedis = null;
+        try {
+            jedis = JedisPoolUtils.getJedis();
+            Set<String> goodsHot = jedis.zrevrange("goodsHot", 0, 5);
+            return goodsHot;
         } finally {
             JedisPoolUtils.returnRes(jedis);
         }

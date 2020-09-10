@@ -3,9 +3,12 @@ package com.simple.share.service;
 import com.simple.share.model.MaterialDo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.simple.share.vo.category.CategoryVo;
+import com.simple.share.vo.category.ReqGoodsVo;
 import com.simple.share.vo.category.ReqMaterialVo;
+import com.simple.share.vo.taobao.ReqCreateTwdVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -40,4 +43,41 @@ public interface MaterialService extends IService<MaterialDo> {
      * @param:reqMaterialVo
      **/
     String getListMaterial(ReqMaterialVo reqMaterialVo);
+
+
+    /**
+     * @return
+     * @Author: luke
+     * @Description: 获取商品详情页
+     * @Date: 2020-09-10 13:18
+     * @param:null
+     **/
+    String getGoodsDetail(String goodsId);
+
+    /**
+     * @return
+     * @Author: luke
+     * @Description: 生成淘口令
+     * @Date: 2020-09-10 16:01
+     * @param:null
+     **/
+    String createTpw(ReqCreateTwdVo reqCreateTwdVo);
+
+    /**
+     * @return
+     * @Author: luke
+     * @Description: 搜索商品
+     * @Date: 2020-09-10 17:38
+     * @param:null
+     **/
+    String searchGoods(ReqGoodsVo reqGoodsVo);
+
+    /**
+     * @Author: luke
+     * @Description: 获取热门搜素
+     * @Date:  2020-09-10 19:58
+    * @param:null
+     * @return 
+     **/
+    Set<String> getHotKey();
 }

@@ -7,10 +7,8 @@ import com.spring.simple.development.support.properties.PropertyConfigurer;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
-import com.taobao.api.request.TbkActivityInfoGetRequest;
-import com.taobao.api.request.TbkDgOptimusMaterialRequest;
-import com.taobao.api.response.TbkActivityInfoGetResponse;
-import com.taobao.api.response.TbkDgOptimusMaterialResponse;
+import com.taobao.api.request.*;
+import com.taobao.api.response.*;
 import org.springframework.stereotype.Service;
 
 /**
@@ -48,6 +46,20 @@ public class TaobaoServiceImpl implements TaobaoService {
     }
 
     @Override
+    public String getGoodsDetail(String goodsId) {
+        try {
+            TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
+            TbkItemInfoGetRequest req = new TbkItemInfoGetRequest();
+            req.setNumIids(goodsId);
+            req.setPlatform(2L);
+            TbkItemInfoGetResponse rsp = client.execute(req);
+            return rsp.getBody();
+        } catch (Exception e) {
+            throw new GlobalException(SimpleShareResponseCode.RES_TAOBAO_TBK_ITEM_INFO_GET, "获取详情失败");
+        }
+    }
+
+    @Override
     public String getActivity(String activityMaterialId) {
         try {
             TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
@@ -59,6 +71,39 @@ public class TaobaoServiceImpl implements TaobaoService {
             return null;
         } catch (Exception e) {
             throw new GlobalException(SimpleShareResponseCode.RES_TAOBAO_TBK_ACTIVITY_INFO_GET, "活动获取失败");
+        }
+    }
+
+    @Override
+    public String createTpw(String text, String twdUrl) {
+        try {
+            TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
+            TbkTpwdCreateRequest req = new TbkTpwdCreateRequest();
+            req.setText(text);
+            req.setUrl(twdUrl);
+            TbkTpwdCreateResponse rsp = client.execute(req);
+            return rsp.getBody();
+        } catch (Exception e) {
+            throw new GlobalException(SimpleShareResponseCode.RES_TAOBAO_TBK_TPWD_CREATE, "生成淘口令失败");
+        }
+    }
+
+    @Override
+    public String searchGoods(String text, String sort, Long pageSize, Long pageNo) {
+        try {
+            TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
+            TbkDgMaterialOptionalRequest req = new TbkDgMaterialOptionalRequest();
+            req.setQ(text);
+            req.setSort(sort);
+            req.setPlatform(2L);
+            req.setAdzoneId(adZoneId);
+            req.setPageSize(pageSize);
+            req.setHasCoupon(true);
+            req.setPageNo(pageNo);
+            TbkDgMaterialOptionalResponse rsp = client.execute(req);
+            return rsp.getBody();
+        } catch (Exception e) {
+            throw new GlobalException(SimpleShareResponseCode.RES_TAOBAO_TBK_DG_MATERIAL_OPTIONAL, "搜索商品失败");
         }
     }
 }

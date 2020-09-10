@@ -32,6 +32,25 @@ public class SimpleShareResponseCode extends GlobalResponseCode {
     public static final String TAOBAO_TBK_ACTIVITY_INFO_GET_CODE = "taobao tbk activity info get fail";
 
 
+    /**
+     * 淘宝客商品详情页获取失败
+     */
+    public static final int TAOBAO_TBK_ITEM_INFO_GET = 1003;
+    public static final String TAOBAO_TBK_ITEM_INFO_GET_CODE = "taobao tbk item info get fail";
+
+    /**
+     * 生成淘口令失败
+     */
+    public static final int TAOBAO_TBK_TPWD_CREATE = 1004;
+    public static final String TAOBAO_TBK_TPWD_CREATE_CODE = "taobao tbk tpwd create fail";
+
+    /**
+     * 搜索商品失败
+     */
+    public static final int TAOBAO_TBK_DG_MATERIAL_OPTIONAL = 1005;
+    public static final String TAOBAO_TBK_DG_MATERIAL_OPTIONAL_CODE = "taobao tbk dg material optional fail";
+
+
     private SimpleShareResponseCode(int status, String code, String message) {
         super(status, code, message);
     }
@@ -43,5 +62,8 @@ public class SimpleShareResponseCode extends GlobalResponseCode {
     public static final GlobalResponseCode RES_WEiXIN_LOGIN_FAil = new GlobalResponseCode(WEiXIN_LOGIN_FAil, WEiXIN_LOGIN_FAil_CODE, "%s");
     public static final GlobalResponseCode RES_TAOBAO_TBK_ACTIVITY_INFO_GET = new GlobalResponseCode(TAOBAO_TBK_ACTIVITY_INFO_GET, TAOBAO_TBK_ACTIVITY_INFO_GET_CODE, "%s");
     public static final GlobalResponseCode RES_TAOBAO_TBK_DG_OPTIMUS_MATERIAL = new GlobalResponseCode(TAOBAO_TBK_DG_OPTIMUS_MATERIAL, TAOBAO_TBK_DG_OPTIMUS_MATERIAL_CODE, "%s");
+    public static final GlobalResponseCode RES_TAOBAO_TBK_ITEM_INFO_GET = new GlobalResponseCode(TAOBAO_TBK_ITEM_INFO_GET, TAOBAO_TBK_ITEM_INFO_GET_CODE, "%s");
+    public static final GlobalResponseCode RES_TAOBAO_TBK_TPWD_CREATE = new GlobalResponseCode(TAOBAO_TBK_TPWD_CREATE, TAOBAO_TBK_TPWD_CREATE_CODE, "%s");
+    public static final GlobalResponseCode RES_TAOBAO_TBK_DG_MATERIAL_OPTIONAL = new GlobalResponseCode(TAOBAO_TBK_DG_MATERIAL_OPTIONAL, TAOBAO_TBK_DG_MATERIAL_OPTIONAL_CODE, "%s");
 
 }
