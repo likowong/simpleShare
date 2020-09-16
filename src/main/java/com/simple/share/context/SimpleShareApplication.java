@@ -2,6 +2,7 @@ package com.simple.share.context;
 
 
 import com.simple.share.task.GoodsTask;
+import com.simple.share.task.TbOrderTask;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Component;
 public class SimpleShareApplication implements ApplicationContextAware {
     @Autowired
     private GoodsTask goodsTask;
+    @Autowired
+    private TbOrderTask tbOrderTask;
 
     private static ApplicationContext applicationContext;
 
@@ -27,6 +30,7 @@ public class SimpleShareApplication implements ApplicationContextAware {
         SimpleShareApplication.applicationContext = applicationContext;
         // 初始化数据
         //goodsTask.refreshGoods();
+        //tbOrderTask.pullOrder();
     }
 
     public static <T> T getBeanByType(Class clazz) throws BeansException {

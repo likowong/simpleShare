@@ -1,5 +1,6 @@
 package com.simple.share.vo.wexin;
 
+import com.simple.share.vo.taobao.MemberAmountVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -1,6 +1,11 @@
 package com.simple.share.taobao;
 
+import com.simple.share.model.TaobaoOrderDo;
+import com.simple.share.taobao.dto.InviterInfo;
+import com.simple.share.taobao.dto.InviterMemberInfo;
 import com.taobao.api.ApiException;
+
+import java.util.List;
 
 /**
  * 淘宝客Api服务
@@ -39,19 +44,47 @@ public interface TaobaoService {
     String getGoodsDetail(String goodsId);
 
     /**
+     * @return
      * @Author: luke
      * @Description: 生成淘口令
-     * @Date:  2020-09-10 15:52
-    * @param:null
-     * @return 
+     * @Date: 2020-09-10 15:52
+     * @param:null
      **/
-    String createTpw(String text,String url);
+    String createTpw(String text, String url);
+
     /**
+     * @return
      * @Author: luke
      * @Description: 搜索商品
-     * @Date:  2020-09-10 17:32
-    * @param:null
-     * @return 
+     * @Date: 2020-09-10 17:32
+     * @param:null
      **/
-    String searchGoods(String text,String sort,Long pageSize, Long pageNo);
+    String searchGoods(String text, String sort, Long pageSize, Long pageNo);
+
+    /**
+     * @return
+     * @Author: luke
+     * @Description: 生成邀请的淘口令
+     * @Date: 2020-09-16 12:25
+     * @param:null
+     **/
+    InviterInfo createInviterTbCode(String openId);
+
+    /**
+     * @return
+     * @Author: luke
+     * @Description: 获取备案用户信息
+     * @Date: 2020-09-16 13:09
+     * @param:null
+     **/
+    InviterMemberInfo getInviterMemberInfo(String openId);
+
+    /**
+     * @return
+     * @Author: luke
+     * @Description: 查询淘宝订单
+     * @Date: 2020-09-16 15:50
+     * @param:null
+     **/
+    List<TaobaoOrderDo> getTaobaoOrderDoList(String startTime, String endTime);
 }

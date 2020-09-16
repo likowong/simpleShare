@@ -4,14 +4,8 @@ import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.internal.util.StringUtils;
-import com.taobao.api.request.TbkActivityInfoGetRequest;
-import com.taobao.api.request.TbkDgMaterialOptionalRequest;
-import com.taobao.api.request.TbkDgOptimusMaterialRequest;
-import com.taobao.api.request.TbkTpwdCreateRequest;
-import com.taobao.api.response.TbkActivityInfoGetResponse;
-import com.taobao.api.response.TbkDgMaterialOptionalResponse;
-import com.taobao.api.response.TbkDgOptimusMaterialResponse;
-import com.taobao.api.response.TbkTpwdCreateResponse;
+import com.taobao.api.request.*;
+import com.taobao.api.response.*;
 import org.junit.Test;
 
 public class TaobaoTest {
@@ -19,6 +13,7 @@ public class TaobaoTest {
     String appKey = "31238408";
     String secret = "07fb32b10dd0ec573f72544743de57a6";
     private Long adZoneId = 110823000476L;
+    String sessionKey = "6100a17e317f619260581106b11e0fdb664a4642335216a828324030";
 
     /**
      * @return
@@ -37,13 +32,14 @@ public class TaobaoTest {
         req.setQ("女装");
         req.setMaterialId(2836L);
         req.setHasCoupon(true);
-        req.setAdzoneId(110823000476L);
+        req.setAdzoneId(adZoneId);
         req.setNeedFreeShipment(true);
         req.setNeedPrepay(true);
         req.setIncludePayRate30(true);
         req.setIncludeGoodRate(true);
         req.setIncludeRfdRate(true);
-        TbkDgMaterialOptionalResponse rsp =client.execute(req);
+        req.setRelationId("2602382436");
+        TbkDgMaterialOptionalResponse rsp = client.execute(req);
         System.out.println(rsp.getBody());
     }
 
@@ -75,16 +71,70 @@ public class TaobaoTest {
         TbkDgOptimusMaterialResponse rsp = client.execute(req);
         System.out.println(rsp.getBody());
     }
+
     @Test
     public void test4() throws ApiException {
         TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
         TbkTpwdCreateRequest req = new TbkTpwdCreateRequest();
-        req.setUserId("123");
+        req.setUserId("2602382436");
         req.setText("长度大于5个字符");
-        req.setUrl("https://s.click.taobao.com/t?e=m%3D2%26s%3DAxCJaWTSeIZw4vFB6t2Z2ueEDrYVVa64Dne87AjQPk9yINtkUhsv0KF59RMBa4vSU70RzSpzBNdjbLhZS%2BRfCoB4U5jY9%2BEZBiBPVre%2FhtYkZAozc%2BRbKZWCLkleKehKUyNpxLfgKr0jWpzpm6nEC7u7m09eNMONFrjU9UGf0rJcfm37xb4PJRLvbryQoUVfN6AMIIz9%2BKDjNQ%2FKbdQu23EqY%2Bakgpmw&scm=1007.19011.125585.0_13366&pvid=17f2c08a-b18d-4efe-af5b-d6052d4c2c4e&app_pvid=59590_11.132.118.119_978_1599674425454&ptl=floorId:13366;originalFloorId:13366;pvid:17f2c08a-b18d-4efe-af5b-d6052d4c2c4e;app_pvid:59590_11.132.118.119_978_1599674425454&union_lens=lensId%3AMAPI%401599674425%400b847677_b0e9_1747406a098_76a6%4001");
+        req.setUrl("https://mos.m.taobao.com/inviter/register?inviterCode=MQL8W5&src=pub&app=common&rtag=%E5%B0%8F%E8%8B%B9%E6%9E%9C");
         req.setLogo("https://uland.taobao.com/");
         req.setExt("{}");
         TbkTpwdCreateResponse rsp = client.execute(req);
+        System.out.println(rsp.getBody());
+    }
+
+    @Test
+    public void test5() throws ApiException {
+        TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
+        TbkOrderDetailsGetRequest req = new TbkOrderDetailsGetRequest();
+        req.setPositionIndex("2222_334666");
+        req.setPageSize(20L);
+        req.setEndTime("2020-09-15 20:00:00");
+        req.setStartTime("2020-09-15 19:00:00");
+        req.setJumpType(1L);
+        req.setPageNo(1L);
+        req.setOrderScene(2L);
+        req.setTkStatus(12L);
+        TbkOrderDetailsGetResponse rsp = client.execute(req);
+        System.out.println(rsp.getBody());
+    }
+
+    @Test
+    public void test6() throws ApiException {
+        TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
+        TbkScInvitecodeGetRequest req = new TbkScInvitecodeGetRequest();
+        req.setRelationApp("common");
+        req.setCodeType(1L);
+        TbkScInvitecodeGetResponse rsp = client.execute(req, "6100a17e317f619260581106b11e0fdb664a4642335216a828324030");
+        System.out.println(rsp.getBody());
+        // https://mos.m.taobao.com/inviter/register?inviterCode=MQL8W5&src=pub&app=common&rtag=小苹果
+    }
+
+    @Test
+    public void test7() throws ApiException {
+        TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
+        TbkScPublisherInfoSaveRequest req = new TbkScPublisherInfoSaveRequest();
+        req.setRelationFrom("1");
+        req.setOfflineScene("1");
+        req.setOnlineScene("1");
+        req.setInviterCode("MQL8W5");
+        req.setInfoType(1L);
+        req.setNote("小蜜蜂");
+        TbkScPublisherInfoSaveResponse rsp = client.execute(req, sessionKey);
+        System.out.println(rsp.getBody());
+    }
+
+    @Test
+    public void test8() throws ApiException {
+        TaobaoClient client = new DefaultTaobaoClient(url, appKey, secret);
+        TbkScPublisherInfoGetRequest req = new TbkScPublisherInfoGetRequest();
+        req.setInfoType(1L);
+        req.setPageNo(1L);
+        req.setPageSize(10L);
+        req.setRelationApp("common");
+        TbkScPublisherInfoGetResponse rsp = client.execute(req, sessionKey);
         System.out.println(rsp.getBody());
     }
 }

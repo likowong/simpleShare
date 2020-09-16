@@ -2,6 +2,7 @@ package com.simple.share.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
@@ -14,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author luke
- * @since 2020-09-08
+ * @since 2020-09-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -53,7 +54,7 @@ public class MemberDo implements Serializable {
     private String avatarUrl;
 
     /**
-     * 姓名
+     * 性别
      */
     private String gender;
 
@@ -61,6 +62,8 @@ public class MemberDo implements Serializable {
      * 地址
      */
     private String address;
+
+    private Date createDate;
 
 
 }

@@ -50,6 +50,34 @@ public class SimpleShareResponseCode extends GlobalResponseCode {
     public static final int TAOBAO_TBK_DG_MATERIAL_OPTIONAL = 1005;
     public static final String TAOBAO_TBK_DG_MATERIAL_OPTIONAL_CODE = "taobao tbk dg material optional fail";
 
+    /**
+     * 生成备案口令失败
+     */
+    public static final int TAOBAO_TBK_SC_INVITECODE_GET = 1006;
+    public static final String TAOBAO_TBK_SC_INVITECODE_GET_CODE = "taobao tbk sc invitecode get fail";
+
+
+    /**
+     * 私域用户备案信息查询失败
+     */
+    public static final int TAOBAO_TBK_SC_PUBLISHER_INFO_GET = 1007;
+    public static final String TAOBAO_TBK_SC_PUBLISHER_INFO_GET_CODE = "taobao tbk sc publisher info get fail";
+
+    /**
+     * 淘宝客-推广者-所有订单查询 查询失败
+     */
+    public static final int TAOBAO_TBK_ORDER_DETAILS_GET = 1008;
+    public static final String TAOBAO_TBK_ORDER_DETAILS_GET_CODE = "taobao tbk order details get fail";
+
+
+    /**
+     * 淘宝客-推广者-所有订单查询 查询失败
+     */
+    public static final int ADD_ALI_PAY_ACCOUNT = 1009;
+    public static final String ADD_ALI_PAY_ACCOUNT_CODE = "add ali pay account fail";
+
+
+
 
     private SimpleShareResponseCode(int status, String code, String message) {
         super(status, code, message);
@@ -65,5 +93,9 @@ public class SimpleShareResponseCode extends GlobalResponseCode {
     public static final GlobalResponseCode RES_TAOBAO_TBK_ITEM_INFO_GET = new GlobalResponseCode(TAOBAO_TBK_ITEM_INFO_GET, TAOBAO_TBK_ITEM_INFO_GET_CODE, "%s");
     public static final GlobalResponseCode RES_TAOBAO_TBK_TPWD_CREATE = new GlobalResponseCode(TAOBAO_TBK_TPWD_CREATE, TAOBAO_TBK_TPWD_CREATE_CODE, "%s");
     public static final GlobalResponseCode RES_TAOBAO_TBK_DG_MATERIAL_OPTIONAL = new GlobalResponseCode(TAOBAO_TBK_DG_MATERIAL_OPTIONAL, TAOBAO_TBK_DG_MATERIAL_OPTIONAL_CODE, "%s");
+    public static final GlobalResponseCode RES_TAOBAO_TBK_SC_INVITECODE_GET = new GlobalResponseCode(TAOBAO_TBK_SC_INVITECODE_GET, TAOBAO_TBK_SC_INVITECODE_GET_CODE, "%s");
+    public static final GlobalResponseCode RES_TAOBAO_TBK_SC_PUBLISHER_INFO_GET = new GlobalResponseCode(TAOBAO_TBK_SC_PUBLISHER_INFO_GET, TAOBAO_TBK_SC_PUBLISHER_INFO_GET_CODE, "%s");
+    public static final GlobalResponseCode RES_TAOBAO_TBK_ORDER_DETAILS_GET = new GlobalResponseCode(TAOBAO_TBK_ORDER_DETAILS_GET, TAOBAO_TBK_ORDER_DETAILS_GET_CODE, "%s");
+    public static final GlobalResponseCode RES_ADD_ALI_PAY_ACCOUNT = new GlobalResponseCode(ADD_ALI_PAY_ACCOUNT, ADD_ALI_PAY_ACCOUNT_CODE, "%s");
 
 }

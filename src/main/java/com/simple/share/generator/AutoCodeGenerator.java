@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.FileType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
@@ -34,6 +35,7 @@ public class AutoCodeGenerator {
         gc.setServiceName("%sService");
         gc.setEntityName("%sDo");
         gc.setIdType(IdType.AUTO);
+        gc.setDateType(DateType.ONLY_DATE);//定义生成的实体类中日期类型
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
@@ -131,7 +133,7 @@ public class AutoCodeGenerator {
         strategy.setRestControllerStyle(true);
         // 写于父类中的公共字段
         //strategy.setSuperEntityColumns("id");
-        strategy.setInclude("t_material".split(","));
+        strategy.setInclude("t_member_ali_account".split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("t_");
         mpg.setStrategy(strategy);

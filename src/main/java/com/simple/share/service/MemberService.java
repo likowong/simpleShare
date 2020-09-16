@@ -23,4 +23,6 @@ public interface MemberService extends IService<MemberDo> {
      * @param:weixinLoginVo
      **/
     UserInfoVo login(WeixinLoginVo weixinLoginVo);
+
+
 }
