@@ -31,6 +31,7 @@ public class SimpleShareApplication implements ApplicationContextAware {
         // 初始化数据
         //goodsTask.refreshGoods();
         //tbOrderTask.pullOrder();
+        tbOrderTask.changeOrder();
     }
 
     public static <T> T getBeanByType(Class clazz) throws BeansException {

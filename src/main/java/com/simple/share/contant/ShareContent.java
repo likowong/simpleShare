@@ -12,4 +12,5 @@ public class ShareContent {
      * 用户token
      **/
     public final static String MEMBER_TOKEN_KEY = "share_member_key";
+    public final static String MEMBER_RELATION_KEY = "share_relation_key";
 }

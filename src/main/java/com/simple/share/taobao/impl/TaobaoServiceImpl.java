@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,7 +122,12 @@ public class TaobaoServiceImpl implements TaobaoService {
             req.setPageSize(pageSize);
             req.setRelationId("2602382436");
             req.setHasCoupon(true);
+            req.setNeedFreeShipment(true);
+            req.setNeedPrepay(true);
             req.setPageNo(pageNo);
+            req.setIsOverseas(false);
+            req.setIncludeGoodRate(true);
+            req.setLockRateEndTime(System.currentTimeMillis());
             TbkDgMaterialOptionalResponse rsp = client.execute(req);
             return rsp.getBody();
         } catch (Exception e) {

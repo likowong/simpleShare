@@ -46,4 +46,13 @@ public interface MemberTaobaoService extends IService<MemberTaobaoDo> {
      * @return
      **/
     MemberTaobaoDo getMemberTaobaoDoByOpenId(String openId);
+
+    /**
+     * @Author: luke
+     * @Description: 获取渠道ID
+     * @Date:  2020-09-20 18:23
+    * @param:null
+     * @return
+     **/
+    String getRelationId();
 }

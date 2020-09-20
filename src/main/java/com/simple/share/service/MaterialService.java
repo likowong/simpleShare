@@ -63,6 +63,16 @@ public interface MaterialService extends IService<MaterialDo> {
      **/
     String createTpw(ReqCreateTwdVo reqCreateTwdVo);
 
+
+    /**
+     * @return
+     * @Author: luke
+     * @Description: 生成淘口令
+     * @Date: 2020-09-10 16:01
+     * @param:null
+     **/
+    String createTpwWithToken(ReqCreateTwdVo reqCreateTwdVo);
+
     /**
      * @return
      * @Author: luke

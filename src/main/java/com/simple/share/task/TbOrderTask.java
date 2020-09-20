@@ -11,6 +11,7 @@ import com.simple.share.service.MemberAmountService;
 import com.simple.share.service.MemberTaobaoService;
 import com.simple.share.service.TaobaoOrderService;
 import com.simple.share.taobao.TaobaoService;
+import com.simple.share.taobao.dto.InviterMemberInfo;
 import com.simple.share.vo.category.CategoryVo;
 import com.simple.share.vo.category.ReqMaterialVo;
 import com.spring.simple.development.core.component.mvc.BaseSupport;
@@ -25,6 +26,7 @@ import redis.clients.jedis.Jedis;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * TODO
@@ -72,7 +74,7 @@ public class TbOrderTask {
                 TaobaoOrderDo copyTaobaoOrderDo = baseSupport.objectCopy(taobaoOrderDo, TaobaoOrderDo.class);
                 copyTaobaoOrderDo.setId(dbTaobaoOrderDo.getId());
                 // 更新
-                taobaoOrderService.save(copyTaobaoOrderDo);
+                taobaoOrderService.updateById(copyTaobaoOrderDo);
             }
 
             MemberAmountDo dbMemberAmountDo = memberAmountService.getMemberAmountDo(taobaoOrderDo.getTradeId());
@@ -111,7 +113,7 @@ public class TbOrderTask {
                 if (dbTaobaoOrderDo.getTkStatus().equals("14")) {
                     dbMemberAmountDo.setIsValid(CommonConstant.CODE3);
                 }
-                memberAmountService.save(dbMemberAmountDo);
+                memberAmountService.updateById(dbMemberAmountDo);
             }
         }
     }
@@ -140,51 +142,50 @@ public class TbOrderTask {
             if (CollectionUtils.isEmpty(taobaoOrderDoList)) {
                 continue;
             }
-            for (TaobaoOrderDo taobaoOrderDo : taobaoOrderDoList) {
-
-                TaobaoOrderDo copyTaobaoOrderDo = baseSupport.objectCopy(taobaoOrderDo, TaobaoOrderDo.class);
-                copyTaobaoOrderDo.setId(dbTaobaoOrderDo.getId());
-                // 更新
-                taobaoOrderService.save(copyTaobaoOrderDo);
-
-                MemberAmountDo dbMemberAmountDo = memberAmountService.getMemberAmountDo(taobaoOrderDo.getTradeId());
-
-                // 计算金额
-                MemberTaobaoDo memberTaobaoDo = memberTaobaoService.getMemberTaobaoDo(taobaoOrderDo.getRelationId());
-                if (memberTaobaoDo == null) {
-                    continue;
+            List<TaobaoOrderDo> onlyTaobaoOrderDo = taobaoOrderDoList.stream().filter(TaobaoOrderDo -> dbTaobaoOrderDo.getTradeId().equals(TaobaoOrderDo.getTradeId())).collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(onlyTaobaoOrderDo)) {
+                continue;
+            }
+            TaobaoOrderDo copyTaobaoOrderDo = baseSupport.objectCopy(onlyTaobaoOrderDo.get(0), TaobaoOrderDo.class);
+            copyTaobaoOrderDo.setId(dbTaobaoOrderDo.getId());
+            // 更新
+            taobaoOrderService.updateById(copyTaobaoOrderDo);
+            MemberAmountDo dbMemberAmountDo = memberAmountService.getMemberAmountDo(onlyTaobaoOrderDo.get(0).getTradeId());
+            // 计算金额
+            MemberTaobaoDo memberTaobaoDo = memberTaobaoService.getMemberTaobaoDo(onlyTaobaoOrderDo.get(0).getRelationId());
+            if (memberTaobaoDo == null) {
+                continue;
+            }
+            if (dbMemberAmountDo == null) {
+                MemberAmountDo memberAmountDo = new MemberAmountDo();
+                memberAmountDo.setIsPay("n");
+                memberAmountDo.setAmount(new BigDecimal(dbTaobaoOrderDo.getPubSharePreFee()));
+                memberAmountDo.setChannel("tb");
+                memberAmountDo.setCreateDate(new Date());
+                if (dbTaobaoOrderDo.getTkStatus().equals("12")) {
+                    memberAmountDo.setIsValid(CommonConstant.CODE1);
                 }
-                if (dbMemberAmountDo == null) {
-                    MemberAmountDo memberAmountDo = new MemberAmountDo();
-                    memberAmountDo.setIsPay("n");
-                    memberAmountDo.setAmount(new BigDecimal(dbTaobaoOrderDo.getPubSharePreFee()));
-                    memberAmountDo.setChannel("tb");
-                    memberAmountDo.setCreateDate(new Date());
-                    if (dbTaobaoOrderDo.getTkStatus().equals("12")) {
-                        memberAmountDo.setIsValid(CommonConstant.CODE1);
-                    }
-                    if (dbTaobaoOrderDo.getTkStatus().equals("13")) {
-                        memberAmountDo.setIsValid(CommonConstant.CODE2);
-                    }
-                    if (dbTaobaoOrderDo.getTkStatus().equals("14")) {
-                        memberAmountDo.setIsValid(CommonConstant.CODE3);
-                    }
-                    memberAmountDo.setOrderNo(dbTaobaoOrderDo.getTradeId());
-                    memberAmountDo.setRemarks("淘宝订单");
-                    memberAmountDo.setOpenId(memberTaobaoDo.getOpenId());
-                    memberAmountService.save(memberAmountDo);
-                } else {
-                    if (dbTaobaoOrderDo.getTkStatus().equals("12")) {
-                        dbMemberAmountDo.setIsValid(CommonConstant.CODE1);
-                    }
-                    if (dbTaobaoOrderDo.getTkStatus().equals("13")) {
-                        dbMemberAmountDo.setIsValid(CommonConstant.CODE2);
-                    }
-                    if (dbTaobaoOrderDo.getTkStatus().equals("14")) {
-                        dbMemberAmountDo.setIsValid(CommonConstant.CODE3);
-                    }
-                    memberAmountService.save(dbMemberAmountDo);
+                if (dbTaobaoOrderDo.getTkStatus().equals("13")) {
+                    memberAmountDo.setIsValid(CommonConstant.CODE2);
                 }
+                if (dbTaobaoOrderDo.getTkStatus().equals("14")) {
+                    memberAmountDo.setIsValid(CommonConstant.CODE3);
+                }
+                memberAmountDo.setOrderNo(dbTaobaoOrderDo.getTradeId());
+                memberAmountDo.setRemarks("淘宝订单");
+                memberAmountDo.setOpenId(memberTaobaoDo.getOpenId());
+                memberAmountService.save(memberAmountDo);
+            } else {
+                if (dbTaobaoOrderDo.getTkStatus().equals("12")) {
+                    dbMemberAmountDo.setIsValid(CommonConstant.CODE1);
+                }
+                if (dbTaobaoOrderDo.getTkStatus().equals("13")) {
+                    dbMemberAmountDo.setIsValid(CommonConstant.CODE2);
+                }
+                if (dbTaobaoOrderDo.getTkStatus().equals("14")) {
+                    dbMemberAmountDo.setIsValid(CommonConstant.CODE3);
+                }
+                memberAmountService.updateById(dbMemberAmountDo);
             }
 
         }

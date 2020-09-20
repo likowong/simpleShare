@@ -10,6 +10,7 @@ import com.simple.share.mapper.MaterialMapper;
 import com.simple.share.model.MemberDo;
 import com.simple.share.service.MaterialService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.simple.share.service.MemberTaobaoService;
 import com.simple.share.support.SimpleShareResponseCode;
 import com.simple.share.taobao.TaobaoService;
 import com.simple.share.vo.active.ActiveInfoVo;
@@ -50,6 +51,8 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, MaterialDo>
 
     @Autowired
     private TaobaoService taobaoService;
+    @Autowired
+    private MemberTaobaoService memberTaobaoService;
 
     @Override
     @ApiOperation(value = "获取专题物料列表")
@@ -127,6 +130,19 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, MaterialDo>
     @ValidHandler(key = "reqCreateTwdVo", value = ReqCreateTwdVo.class)
     public String createTpw(ReqCreateTwdVo reqCreateTwdVo) {
         return taobaoService.createTpw(reqCreateTwdVo.getText(), reqCreateTwdVo.getUrl());
+    }
+
+    @Override
+    @ApiOperation(value = "已登录的用户生成淘口令")
+    @ApiImplicitParam(name = "string", description = "商品Id", resultDataType = String.class)
+    @IsApiService
+    @ValidHandler(key = "createTpwWithToken", value = ReqCreateTwdVo.class)
+    public String createTpwWithToken(ReqCreateTwdVo reqCreateTwdVo) {
+        String relationId = memberTaobaoService.getRelationId();
+        if (StringUtils.isEmpty(relationId)) {
+            return taobaoService.createTpw(reqCreateTwdVo.getText(), reqCreateTwdVo.getUrl());
+        }
+        return taobaoService.createTpw(reqCreateTwdVo.getText(), reqCreateTwdVo.getUrl() + "&relationId=" + relationId);
     }
 
     @Override

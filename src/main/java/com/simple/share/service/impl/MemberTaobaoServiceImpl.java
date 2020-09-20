@@ -1,6 +1,7 @@
 package com.simple.share.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.simple.share.contant.ShareContent;
 import com.simple.share.interceptor.MemberInfo;
 import com.simple.share.interceptor.MemberThreadLocal;
 import com.simple.share.model.MemberDo;
@@ -20,10 +21,12 @@ import com.spring.simple.development.core.annotation.base.swagger.ApiImplicitPar
 import com.spring.simple.development.core.annotation.base.swagger.ApiOperation;
 import com.spring.simple.development.support.exception.GlobalException;
 import com.spring.simple.development.support.exception.ResponseCode;
+import com.spring.simple.development.support.utils.JedisPoolUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.Jedis;
 
 import java.util.Date;
 import java.util.List;
@@ -120,5 +123,33 @@ public class MemberTaobaoServiceImpl extends ServiceImpl<MemberTaobaoMapper, Mem
             return null;
         }
         return listMemberDo.get(0);
+    }
+
+    @Override
+    public String getRelationId() {
+        MemberInfo memberInfo = MemberThreadLocal.getMemberInfo();
+        Jedis jedis = null;
+        try {
+            jedis = JedisPoolUtils.getJedis();
+            String relationId = jedis.get(ShareContent.MEMBER_RELATION_KEY + memberInfo.getWxOpenId());
+
+            if (!StringUtils.isEmpty(relationId)) {
+                return relationId;
+            }
+            QueryWrapper<MemberTaobaoDo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(MemberTaobaoDo::getOpenId, memberInfo.getWxOpenId());
+            List<MemberTaobaoDo> listMemberDo = list(queryWrapper);
+            if (CollectionUtils.isEmpty(listMemberDo)) {
+                return null;
+            }
+            String dBRelationId = listMemberDo.get(0).getRelationId();
+            if (StringUtils.isEmpty(dBRelationId)) {
+                return null;
+            }
+            jedis.set(ShareContent.MEMBER_RELATION_KEY + memberInfo.getWxOpenId(), dBRelationId);
+            return dBRelationId;
+        } finally {
+            JedisPoolUtils.returnRes(jedis);
+        }
     }
 }
