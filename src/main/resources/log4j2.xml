@@ -2,7 +2,7 @@
 <Configuration status="warn" monitorInterval="120">
 
     <Properties>
-        <Property name="logRoot">/data/logs/simpleDemo/</Property>
+        <Property name="logRoot">/data/logs/simpleShare/</Property>
         <Property name="Log4jContextSelector">org.apache.logging.log4j.core.async.AsyncLoggerContextSelector</Property>
     </Properties>
 
